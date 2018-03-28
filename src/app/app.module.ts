@@ -5,8 +5,15 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
+
+// authentification en page d'accueil
+
 import { HomePage } from '../pages/home/home';
 import { AuthProvider } from '../providers/auth/auth';
+
+// module calendar
+
+import { NgCalendarModule } from 'ionic2-calendar';
 
 @NgModule({
   declarations: [
@@ -14,6 +21,7 @@ import { AuthProvider } from '../providers/auth/auth';
     HomePage
   ],
   imports: [
+    NgCalendarModule,
     BrowserModule,
     IonicModule.forRoot(MyApp)
   ],
