@@ -15,6 +15,13 @@ import { AuthProvider } from '../providers/auth/auth';
 
 import { NgCalendarModule } from 'ionic2-calendar';
 
+// connexion bdd poir pousser les events
+import { HttpModule } from '@angular/http';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFireModule } from 'angularfire2';
+import { FirebaseService } from './../providers/firebase-service/firebase-service';
+import { firebaseConfig } from './credentials';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -23,6 +30,9 @@ import { NgCalendarModule } from 'ionic2-calendar';
   imports: [
     NgCalendarModule,
     BrowserModule,
+    HttpModule,
+    AngularFireDatabaseModule,
+    AngularFireModule.initializeApp(firebaseConfig),
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
@@ -34,7 +44,8 @@ import { NgCalendarModule } from 'ionic2-calendar';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    AuthProvider
+    AuthProvider,
+    FirebaseService
   ]
 })
 export class AppModule {}

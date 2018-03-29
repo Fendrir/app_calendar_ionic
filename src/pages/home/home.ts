@@ -48,6 +48,10 @@ export class HomePage {
         this.eventSource = [];
         setTimeout(() => {
           this.eventSource = events;
+
+          // test push database
+
+          // ... code
         });
         
       }
