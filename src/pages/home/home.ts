@@ -16,8 +16,8 @@ import 'rxjs/add/operator/map';
 export class HomePage {
 
   eventSource = [];
-  // eventSourceDb: AngularFireList<any[]>;
-  // eventsCal: Observable<any>;
+  // eventSourceDb: AngularFireList<any>;
+  // eventsCal: Observable<any[]>;
   viewTitle: string;
   selectedDay = new Date();
 

@@ -8,6 +8,8 @@ import { AngularFireDatabase, AngularFireList } from 'angularfire2/database'; //
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
+import { FirebaseService } from '../../providers/firebase-service/firebase-service';
+
 @IonicPage()
 @Component({
   selector: 'page-event-modal',
@@ -18,6 +20,7 @@ export class EventModalPage {
   eventSourceDb: AngularFireList<any>;
   eventsCal: Observable<any[]>;
 
+
   event = { startTime: new Date().toISOString(), endTime: new Date().toISOString(), allDay: false};
   minDate = new Date().toISOString();
 
@@ -25,6 +28,7 @@ export class EventModalPage {
     public navCtrl: NavController,
     private navParams: NavParams,
     public viewCtrl: ViewController,
+    public firebaseService: FirebaseService,
 
     db: AngularFireDatabase
   ) {
@@ -34,7 +38,9 @@ export class EventModalPage {
 
     this.eventSourceDb = db.list('events');
     this.eventsCal = this.eventSourceDb.snapshotChanges().map(changes => {
-      return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
+      return changes.map(c => ({ 
+        key: c.payload.key, ...c.payload.val()
+      }));
     });
 
   }
@@ -43,9 +49,14 @@ export class EventModalPage {
     this.viewCtrl.dismiss();
   }
 
-  addEvent(newevent: string) {
-    // this.viewCtrl.dismiss(this.event);
-    this.eventSourceDb.push({ text: newevent });
+  save(newTitle: string, newStartTime: Date, newEndTime: Date, newAllDay: boolean) {
+    this.viewCtrl.dismiss(this.event);
+    this.eventSourceDb.push({ 
+      text: newTitle,
+      dateStart: newStartTime,
+      dateEnd: newEndTime,
+      allday: newAllDay 
+     });
   }
 
 }

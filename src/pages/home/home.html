@@ -17,7 +17,7 @@
 <ion-content padding>
   <h1 class="text-center">Bienvenue sur votre Agenda</h1>
 
-  <calendar [eventSource]="eventSourceDb"
+  <calendar [eventSource]="eventSource"
   [calendarMode]="calendar.mode"
   [currentDate]="calendar.currentDate"
   (onEventSelected)="onEventSelected($event)"
