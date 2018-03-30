@@ -11,10 +11,10 @@
 
 
 <ion-content>
-  <ion-list>
+  <ion-list *ngFor="let event of eventsCal | async">
     
     <ion-item>
-      <ion-input type="text" placeholder="Title" [(ngModel)]="event.title"></ion-input>
+      <ion-input type="text" #newevent placeholder="Title" [(ngModel)]="event.title"></ion-input>
     </ion-item>
 
     <ion-item>
@@ -38,7 +38,8 @@
       <ion-icon name="close"></ion-icon> Cancel
     </button>
 
-  <button ion-button color="secondary" full icon-left (click)="save()">
+
+  <button ion-button color="secondary" full icon-left (click)="addEvent(newevent.value)">
     <ion-icon name="checkmark"></ion-icon> Add Event
   </button>
 
