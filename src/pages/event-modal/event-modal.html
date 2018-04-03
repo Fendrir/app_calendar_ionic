@@ -14,22 +14,22 @@
   <ion-list>
     
     <ion-item>
-      <ion-input type="text" #newTitle placeholder="Title"></ion-input>
+      <ion-input type="text" #newTitle [(ngModel)]="event.title" placeholder="Title"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label>Start</ion-label>
-      <ion-datetime displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD/MM/YYYY HH:mm" #newStartTime [min]="minDate"></ion-datetime>
+      <ion-datetime displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD/MM/YYYY HH:mm" #newStartTime [(ngModel)]="event.startTime" [min]="minDate"></ion-datetime>
     </ion-item>
 
     <ion-item>
       <ion-label>End</ion-label>
-      <ion-datetime displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD/MM/YYYY HH:mm" #newEndTime [min]="minDate"></ion-datetime>
+      <ion-datetime displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD/MM/YYYY HH:mm" #newEndTime [(ngModel)]="event.endTime" [min]="minDate"></ion-datetime>
     </ion-item>
 
     <ion-item>
       <ion-label>All Day ?</ion-label>
-      <ion-checkbox #newAllDay></ion-checkbox>
+      <ion-checkbox #newAllDay [(ngModel)]="event.allDay"></ion-checkbox>
     </ion-item>
 
   </ion-list>

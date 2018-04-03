@@ -16,8 +16,6 @@ import 'rxjs/add/operator/map';
 export class HomePage {
 
   eventSource = [];
-  // eventSourceDb: AngularFireList<any>;
-  // eventsCal: Observable<any[]>;
   viewTitle: string;
   selectedDay = new Date();
 
@@ -31,12 +29,8 @@ export class HomePage {
     public authProvider: AuthProvider,
     private modalCtrl: ModalController,
     private alertCtrl: AlertController
-    // db: AngularFireDatabase
   ) {
-    // this.eventSourceDb = db.list('events');
-    // this.eventsCal = this.eventSourceDb.snapshotChanges().map(changes => {
-    //   return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
-    // });
+
   }
 
   async logOut(): Promise<void> {
