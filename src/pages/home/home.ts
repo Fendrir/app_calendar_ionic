@@ -42,15 +42,23 @@ export class HomePage {
 
     db: AngularFireDatabase
   ) {
+// --------- test -------
+    db.list('events').snapshotChanges().map(actions => {
+      return actions.map(action => ({ key: action.key, ...action.payload.val() }));
+    }).subscribe(events => {
+      return events.map(event => event.key);
+    });
+// --------- test--------
+
     this.monEvent$ = new BehaviorSubject(null);
     this.testdb$ = this.monEvent$.switchMap(
       title => db.list('/events', ref =>
         title ? ref.orderByChild('text').equalTo(title) : ref)
         .snapshotChanges());
-    this.testdb$ = this.monEvent$.switchMap(
-      dateStart => db.list('/events', ref =>
-        dateStart ? ref.orderByChild('dateStart').equalTo(dateStart): ref)
-        .snapshotChanges());
+    // this.testdb$ = this.monEvent$.switchMap(
+    //   dateStart => db.list('/events', ref =>
+    //     dateStart ? ref.orderByChild('dateStart').equalTo(dateStart): ref)
+    //     .snapshotChanges());
     
 
   }
@@ -90,7 +98,7 @@ export class HomePage {
     this.selectedDay = ev.selectedTime;
   }
 
-  onEventSelected(/*event*/dateStart:Date|null) {
+  onEventSelected(/*event*/dateStart:Date) {
     // let start = moment(event.startTime).format('LLLL');
     // let end = moment(event.endTime).format('LLLL');
 
@@ -102,7 +110,7 @@ export class HomePage {
     // alert.present();
 
     // in work actually
-    let start = this.monEvent$.next(dateStart);
+    let start = this.monEvent$.snapshotChanges({ date: dateStart });
     let end = moment(this.monEvent$).format('LLLL');
 
     let alert = this.alertCtrl.create({
@@ -112,7 +120,8 @@ export class HomePage {
     });
     alert.present();
   }
-  filterBy(title: string|null) {
-    this.monEvent$.next(title);
-  }
+
+  // filterBy(title: string|null) {
+  //   this.monEvent$.next(title);
+  // }
 }
