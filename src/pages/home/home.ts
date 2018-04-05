@@ -101,6 +101,7 @@ export class HomePage {
     // });
     // alert.present();
 
+    // in work actually
     let start = this.monEvent$.next(dateStart);
     let end = moment(this.monEvent$).format('LLLL');
 
