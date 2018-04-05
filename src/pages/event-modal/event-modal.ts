@@ -49,6 +49,7 @@ export class EventModalPage {
     });
 
   }
+  
 
   cancel() {
     this.viewCtrl.dismiss();

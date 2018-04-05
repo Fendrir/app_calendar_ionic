@@ -5,15 +5,25 @@ import * as moment from 'moment';
 
 // partie database firebase
 
-import { AngularFireDatabase, AngularFireList } from 'angularfire2/database'; // remplace FirebaseListObservable
+import { AngularFireDatabase, AngularFireList, AngularFireAction } from 'angularfire2/database'; // remplace FirebaseListObservable
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
+
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/operator/switchMap';
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
+
+    // côté serveur
+    // -----------------------------------------
+    testdb$: Observable<AngularFireAction<firebase.database.DataSnapshot>[]>;
+    monEvent$: BehaviorSubject<string|null>;
+    //----------------- test -------------------
 
   eventSource = [];
   viewTitle: string;
@@ -28,8 +38,20 @@ export class HomePage {
     public navCtrl: NavController,
     public authProvider: AuthProvider,
     private modalCtrl: ModalController,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+
+    db: AngularFireDatabase
   ) {
+    this.monEvent$ = new BehaviorSubject(null);
+    this.testdb$ = this.monEvent$.switchMap(
+      title => db.list('/events', ref =>
+        title ? ref.orderByChild('text').equalTo(title) : ref)
+        .snapshotChanges());
+    this.testdb$ = this.monEvent$.switchMap(
+      dateStart => db.list('/events', ref =>
+        dateStart ? ref.orderByChild('dateStart').equalTo(dateStart): ref)
+        .snapshotChanges());
+    
 
   }
 
@@ -68,15 +90,28 @@ export class HomePage {
     this.selectedDay = ev.selectedTime;
   }
 
-  onEventSelected(event) {
-    let start = moment(event.startTime).format('LLLL');
-    let end = moment(event.endTime).format('LLLL');
+  onEventSelected(/*event*/dateStart:Date|null) {
+    // let start = moment(event.startTime).format('LLLL');
+    // let end = moment(event.endTime).format('LLLL');
+
+    // let alert = this.alertCtrl.create({
+    //   title: '' + event.title,
+    //   subTitle: 'From: ' + start + '<br>To: ' + end,
+    //   buttons: ['OK']
+    // });
+    // alert.present();
+
+    let start = this.monEvent$.next(dateStart);
+    let end = moment(this.monEvent$).format('LLLL');
 
     let alert = this.alertCtrl.create({
-      title: '' + event.title,
+      title: '' + this.monEvent$.title,
       subTitle: 'From: ' + start + '<br>To: ' + end,
       buttons: ['OK']
     });
     alert.present();
+  }
+  filterBy(title: string|null) {
+    this.monEvent$.next(title);
   }
 }
