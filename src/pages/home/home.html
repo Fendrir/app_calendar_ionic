@@ -17,29 +17,36 @@
 <ion-content padding>
 
     <h1>partie requete firebase</h1>
-  <div *ngIf="testdb$ | async; let events;">
-    <ul>
-      <li *ngFor="let event of events">
-        <h3>Titre de l'évènement </h3>
-          {{ event.payload.val().text }}
-          <h4>date de début</h4>
-          Le : {{ event.payload.val().dateStart.day }}
-           / {{ event.payload.val().dateStart.month }}
-           / {{ event.payload.val().dateStart.year }}
-           à {{ event.payload.val().dateStart.hour }}
-           : {{ event.payload.val().dateStart.minute }}
 
-          <h4>date de fin</h4>
-          Le : {{ event.payload.val().dateEnd.day }}
-           / {{ event.payload.val().dateEnd.month }}
-           / {{ event.payload.val().dateEnd.year }}
-           à {{ event.payload.val().dateEnd.hour }}
-           : {{ event.payload.val().dateEnd.minute }}
+    <div *ngIf="testdb$ | async; let events;">
+      <ion-list *ngFor="let event of events">
+        <ion-item>
+          <h3>Titre de l'évènement </h3>
+          <h3>{{ event.text }}</h3>
+          <div>
+            <ion-list>
+                <h4>date de début</h4>
+              Le : {{ event.dateStart.day }}
+              / {{ event.dateStart.month }}
+              / {{ event.dateStart.year }}
+              à {{ event.dateStart.hour }}
+              : {{ event.dateStart.minute }}
+            </ion-list>
 
-      </li>
-    </ul>
-  <br>
-   </div>
+            <ion-list>
+                <h4>date de fin</h4>
+                Le : {{ event.dateEnd.day }}
+                / {{ event.dateEnd.month }}
+                / {{ event.dateEnd.year }}
+                à {{ event.dateEnd.hour }}
+                : {{ event.dateEnd.minute }}
+            </ion-list>
+          </div>
+        </ion-item>
+      </ion-list>
+    </div>
+    
+
 
   <div>
 

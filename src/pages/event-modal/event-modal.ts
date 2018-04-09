@@ -17,7 +17,7 @@ import { FirebaseService } from '../../providers/firebase-service/firebase-servi
 })
 export class EventModalPage {
 
-  // côté serveur
+// côté serveur
   eventSourceDb: AngularFireList<any>;
   eventsCal: Observable<any[]>;
 
@@ -35,11 +35,12 @@ export class EventModalPage {
   ) {
 
     // coté client
+
     let preselectedDate = moment(this.navParams.get('selectedDay')).format();
     this.event.startTime = preselectedDate;
     this.event.endTime = preselectedDate;
 
-    //coté serveur -- permet de pouvoir utiliser firebase et push mes données dans 'events'
+    //coté fireBase-- permet de pouvoir utiliser firebase et push mes données dans 'events'
 
     this.eventSourceDb = db.list('events');
     this.eventsCal = this.eventSourceDb.snapshotChanges().map(changes => {
@@ -56,14 +57,18 @@ export class EventModalPage {
   }
 
   save(newTitle: string, newStartTime: Date, newEndTime: Date, newAllDay: boolean) {
-    this.viewCtrl.dismiss(this.event); // permet de pousser les données coté clients récupéré ensuite par le viewctrl dans la partie home.ts
+    
+    // permet de pousser les données coté clients récupéré ensuite par le viewctrl dans la partie home.ts
+
+    this.viewCtrl.dismiss(this.event);
 
     // permet de push les données sur la db firebase dans 'events'
+
     this.eventSourceDb.push({ 
       text: newTitle,
       dateStart: newStartTime,
       dateEnd: newEndTime,
-      allday: newAllDay 
+      allday: newAllDay
      });
   }
 

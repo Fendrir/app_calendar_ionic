@@ -20,10 +20,19 @@ import 'rxjs/add/operator/switchMap';
 export class HomePage {
 
     // côté serveur
-    // -----------------------------------------
-    testdb$: Observable<AngularFireAction<firebase.database.DataSnapshot>[]>;
-    monEvent$: BehaviorSubject<string|null>;
+
+    // ----------------------------------------
+
+    testdb$: Observable<any[]>;
+    monEvent$: AngularFireList<any>;
+
     //----------------- test -------------------
+
+
+    // testdb$: Observable<AngularFireAction<firebase.database.DataSnapshot>[]>;
+    // monEvent$: BehaviorSubject<string|null>;
+
+    //----------------- /test -------------------
 
   eventSource = [];
   viewTitle: string;
@@ -42,25 +51,28 @@ export class HomePage {
 
     db: AngularFireDatabase
   ) {
-// --------- test -------
-    db.list('events').snapshotChanges().map(actions => {
-      return actions.map(action => ({ key: action.key, ...action.payload.val() }));
-    }).subscribe(events => {
-      return events.map(event => event.key);
-    });
-// --------- test--------
-
-    this.monEvent$ = new BehaviorSubject(null);
-    this.testdb$ = this.monEvent$.switchMap(
-      title => db.list('/events', ref =>
-        title ? ref.orderByChild('text').equalTo(title) : ref)
-        .snapshotChanges());
-    // this.testdb$ = this.monEvent$.switchMap(
-    //   dateStart => db.list('/events', ref =>
-    //     dateStart ? ref.orderByChild('dateStart').equalTo(dateStart): ref)
-    //     .snapshotChanges());
+  // --------- test ----------
     
 
+    // this.monEvent$ = new BehaviorSubject(null);
+    // this.testdb$ = this.monEvent$.switchMap(
+    //   listEvent => db.list(('/events'),
+    //   ref => listEvent ? ref
+    //   .orderByChild('dateStart')
+    //   :ref).snapshotChanges());
+    
+    // ce code fonctionne mais dans le home.html
+    // il faut mettre comme clef : event.paylodad.val().dateStart.day par exemple
+    
+  //----------- test -----------
+
+    this.monEvent$ = db.list('events');
+    this.testdb$ = this.monEvent$.snapshotChanges().map(changes => {
+      return changes.map(c => ({
+        key: c.payload.key, ...c.payload.val()
+      }));
+    });
+  
   }
 
   async logOut(): Promise<void> {
@@ -84,8 +96,8 @@ export class HomePage {
         this.eventSource = [];
         setTimeout(() => {
           this.eventSource = events;
+          console.log(this.eventSource);
         });
-
       }
     })
   }
@@ -98,30 +110,18 @@ export class HomePage {
     this.selectedDay = ev.selectedTime;
   }
 
-  onEventSelected(/*event*/dateStart:Date) {
-    // let start = moment(event.startTime).format('LLLL');
-    // let end = moment(event.endTime).format('LLLL');
+  onEventSelected(event) {
 
-    // let alert = this.alertCtrl.create({
-    //   title: '' + event.title,
-    //   subTitle: 'From: ' + start + '<br>To: ' + end,
-    //   buttons: ['OK']
-    // });
-    // alert.present();
-
-    // in work actually
-    let start = this.monEvent$.snapshotChanges({ date: dateStart });
-    let end = moment(this.monEvent$).format('LLLL');
+    let start = moment(event.startTime).format('LLLL');
+    let end = moment(event.endTime).format('LLLL');
 
     let alert = this.alertCtrl.create({
-      title: '' + this.monEvent$.title,
+      title: '' + event.title,
       subTitle: 'From: ' + start + '<br>To: ' + end,
       buttons: ['OK']
     });
     alert.present();
+
   }
 
-  // filterBy(title: string|null) {
-  //   this.monEvent$.next(title);
-  // }
 }
