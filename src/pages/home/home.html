@@ -15,16 +15,53 @@
 </ion-header>
 
 <ion-content padding>
-  <h1 class="text-center">Bienvenue sur votre Agenda</h1>
 
-  <calendar [eventSource]="eventSource"
-  [calendarMode]="calendar.mode"
-  [currentDate]="calendar.currentDate"
-  (onEventSelected)="onEventSelected($event)"
-  (onTitleChanged)="onViewTitleChanged($event)"
-  (onTimeSelected)="onTimeSelected($event)"
-  step="30"
-  class="calendar">
+    <h1>partie requete firebase</h1>
+
+    <div *ngIf="testdb$ | async; let events;">
+      <ion-list *ngFor="let event of events">
+        <ion-item>
+          <h3>Titre de l'évènement </h3>
+          <h3>{{ event.text }}</h3>
+          <div>
+            <ion-list>
+                <h4>date de début</h4>
+              Le : {{ event.dateStart.day }}
+              / {{ event.dateStart.month }}
+              / {{ event.dateStart.year }}
+              à {{ event.dateStart.hour }}
+              : {{ event.dateStart.minute }}
+            </ion-list>
+
+            <ion-list>
+                <h4>date de fin</h4>
+                Le : {{ event.dateEnd.day }}
+                / {{ event.dateEnd.month }}
+                / {{ event.dateEnd.year }}
+                à {{ event.dateEnd.hour }}
+                : {{ event.dateEnd.minute }}
+            </ion-list>
+          </div>
+        </ion-item>
+      </ion-list>
+    </div>
+    
+
+
+  <div>
+
+    <h1 class="text-center">Bienvenue sur votre Agenda</h1>
+    
+    <calendar [eventSource]="eventSource"
+    [calendarMode]="calendar.mode"
+    [currentDate]="calendar.currentDate"
+    (onEventSelected)="onEventSelected($event)"
+    (onTitleChanged)="onViewTitleChanged($event)"
+    (onTimeSelected)="onTimeSelected($event)"
+    step="30"
+    class="calendar">
   </calendar>
+  
+</div>
 
 </ion-content>

@@ -14,22 +14,22 @@
   <ion-list>
     
     <ion-item>
-      <ion-input type="text" placeholder="Title" [(ngModel)]="event.title"></ion-input>
+      <ion-input type="text" #newTitle [(ngModel)]="event.title" placeholder="Title"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label>Start</ion-label>
-      <ion-datetime displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD/MM/YYYY HH:mm" [(ngModel)]="event.startTime" [min]="minDate"></ion-datetime>
+      <ion-datetime displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD/MM/YYYY HH:mm" #newStartTime [(ngModel)]="event.startTime" [min]="minDate"></ion-datetime>
     </ion-item>
 
     <ion-item>
       <ion-label>End</ion-label>
-      <ion-datetime displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD/MM/YYYY HH:mm" [(ngModel)]="event.endTime" [min]="minDate"></ion-datetime>
+      <ion-datetime displayFormat="DD/MM/YYYY HH:mm" pickerFormat="DD/MM/YYYY HH:mm" #newEndTime [(ngModel)]="event.endTime" [min]="minDate"></ion-datetime>
     </ion-item>
 
     <ion-item>
       <ion-label>All Day ?</ion-label>
-      <ion-checkbox [(ngModel)]="event.allDay"></ion-checkbox>
+      <ion-checkbox #newAllDay [(ngModel)]="event.allDay"></ion-checkbox>
     </ion-item>
 
   </ion-list>
@@ -37,8 +37,8 @@
   <button ion-button color="danger" full icon-left (click)="cancel()">
       <ion-icon name="close"></ion-icon> Cancel
     </button>
-
-  <button ion-button color="secondary" full icon-left (click)="save()">
+    
+  <button ion-button color="secondary" full icon-left (click)="save(newTitle.value,newStartTime.value, newEndTime.value, newAllDay.value)">
     <ion-icon name="checkmark"></ion-icon> Add Event
   </button>
 

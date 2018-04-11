@@ -3,14 +3,39 @@ import { NavController, ModalController, AlertController } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
 import * as moment from 'moment';
 
+// partie database firebase
+
+import { AngularFireDatabase, AngularFireList, AngularFireAction } from 'angularfire2/database'; // remplace FirebaseListObservable
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/operator/switchMap';
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
 
+    // côté serveur
+
+    // ----------------------------------------
+
+    testdb$: Observable<any[]>;
+    monEvent$: AngularFireList<any>;
+
+  //----------------- test -------------------
+
+
+    // testdb$: Observable<AngularFireAction<firebase.database.DataSnapshot>[]>;
+    // monEvent$: BehaviorSubject<string|null>;
+
+    //----------------- /test -------------------
+  
   eventSource = [];
-  viewTitle : string;
+  viewTitle: string;
   selectedDay = new Date();
 
   calendar = {
@@ -22,9 +47,32 @@ export class HomePage {
     public navCtrl: NavController,
     public authProvider: AuthProvider,
     private modalCtrl: ModalController,
-    private alertCtrl: AlertController
-  ) {
+    private alertCtrl: AlertController,
 
+    db: AngularFireDatabase
+  ) {
+  // --------- test ----------
+    
+
+    // this.monEvent$ = new BehaviorSubject(null);
+    // this.testdb$ = this.monEvent$.switchMap(
+    //   listEvent => db.list(('/events'),
+    //   ref => listEvent ? ref
+    //   .orderByChild('dateStart')
+    //   :ref).snapshotChanges());
+    
+    // ce code fonctionne mais dans le home.html
+    // il faut mettre comme clef : event.paylodad.val().dateStart.day par exemple
+    
+  //----------- test -----------
+
+    this.monEvent$ = db.list('events');
+    this.testdb$ = this.monEvent$.snapshotChanges().map(changes => {
+      return changes.map(c => ({
+        key: c.payload.key, ...c.payload.val()
+      }));
+    });
+  
   }
 
   async logOut(): Promise<void> {
@@ -33,7 +81,7 @@ export class HomePage {
   }
 
   addEvent() {
-    let modal = this.modalCtrl.create('EventModalPage', {selectedDay: this.selectedDay});
+    let modal = this.modalCtrl.create('EventModalPage', { selectedDay: this.selectedDay });
     modal.present();
 
     modal.onDidDismiss(data => {
@@ -48,8 +96,8 @@ export class HomePage {
         this.eventSource = [];
         setTimeout(() => {
           this.eventSource = events;
+          console.log(this.eventSource);
         });
-
       }
     })
   }
@@ -63,14 +111,17 @@ export class HomePage {
   }
 
   onEventSelected(event) {
+
     let start = moment(event.startTime).format('LLLL');
     let end = moment(event.endTime).format('LLLL');
 
     let alert = this.alertCtrl.create({
-      title:'' + event.title,
+      title: '' + event.title,
       subTitle: 'From: ' + start + '<br>To: ' + end,
       buttons: ['OK']
     });
     alert.present();
+
   }
+
 }
