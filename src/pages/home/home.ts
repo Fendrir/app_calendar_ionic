@@ -26,14 +26,14 @@ export class HomePage {
     testdb$: Observable<any[]>;
     monEvent$: AngularFireList<any>;
 
-    //----------------- test -------------------
+  //----------------- test -------------------
 
 
     // testdb$: Observable<AngularFireAction<firebase.database.DataSnapshot>[]>;
     // monEvent$: BehaviorSubject<string|null>;
 
     //----------------- /test -------------------
-
+  
   eventSource = [];
   viewTitle: string;
   selectedDay = new Date();
